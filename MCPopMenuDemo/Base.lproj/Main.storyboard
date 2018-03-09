@@ -50,7 +50,7 @@
                                 </connections>
                             </button>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="92t-06-1vn">
-                                <rect key="frame" x="20" y="84" width="335" height="178.5"/>
+                                <rect key="frame" x="20" y="478.5" width="335" height="178.5"/>
                                 <color key="backgroundColor" red="0.68511284722222221" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="92t-06-1vn" secondAttribute="height" multiplier="15:8" id="Gbn-hK-a22"/>
@@ -62,8 +62,8 @@
                             <constraint firstItem="92t-06-1vn" firstAttribute="leading" secondItem="HhW-iJ-1G1" secondAttribute="leading" constant="20" id="3PT-JL-6xn"/>
                             <constraint firstItem="pKj-5B-tKa" firstAttribute="centerY" secondItem="Wpa-P7-NnD" secondAttribute="centerY" id="FDc-0y-2yc"/>
                             <constraint firstItem="92t-06-1vn" firstAttribute="centerX" secondItem="Wpa-P7-NnD" secondAttribute="centerX" id="biu-fo-OkC"/>
-                            <constraint firstItem="92t-06-1vn" firstAttribute="top" secondItem="HhW-iJ-1G1" secondAttribute="top" constant="20" id="dwH-pg-6lw"/>
                             <constraint firstItem="pKj-5B-tKa" firstAttribute="centerX" secondItem="Wpa-P7-NnD" secondAttribute="centerX" id="ifL-UN-pyU"/>
+                            <constraint firstAttribute="bottom" secondItem="92t-06-1vn" secondAttribute="bottom" constant="10" id="kcE-mx-Xf9"/>
                             <constraint firstItem="HhW-iJ-1G1" firstAttribute="trailing" secondItem="92t-06-1vn" secondAttribute="trailing" constant="20" id="sxf-Ja-0sb"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="HhW-iJ-1G1"/>
