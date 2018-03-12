@@ -49,9 +49,13 @@
 }
 // 中间按钮，弹出label
 - (IBAction)popLabelAction:(UIButton *)sender {
-    MCPopMenuView *menuView = [[MCPopMenuView alloc] initFromView:sender text:@"Hello World 你好欢迎来到我的社区" viewWidth:150];
+//    MCPopMenuView *menuView = [[MCPopMenuView alloc] initFromView:sender text:@"Hello World 你好欢迎来到我的社区" viewWidth:150];
+    MCPopMenuView *menuView = [[MCPopMenuView alloc] initFromView:sender titleArray:@[@"发起群聊",@"扫一扫",@"摇一摇",@"转一转"] imageArray:@[@"add_22",@"add_22",@"add_22",@"add_22"] viewWidth:120];
     menuView.setting.dirction = arc4random()%4;
-    menuView.setting.textFont = [UIFont systemFontOfSize:13];
+    menuView.setting.lineHeight = 0.8;
+    menuView.setting.lineColor = [UIColor grayColor];
+    menuView.setting.backgroundColor = [UIColor whiteColor];
+    menuView.setting.textColor = [UIColor blackColor];
     [menuView popView];
 }
 
