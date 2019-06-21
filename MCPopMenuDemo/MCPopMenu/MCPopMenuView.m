@@ -8,13 +8,14 @@
 
 
 #import "MCPopMenuView.h"
+#import "MCMenuTableView.h"
 
 #define MC_SCREEN_W [UIScreen mainScreen].bounds.size.width
 #define MC_SCREEN_H [UIScreen mainScreen].bounds.size.height
 #define TRIANGLE_HEIGHT   5.0f // 箭头的高度,半个宽度
 #define MC_SCREEN_MARGIN  10.0f //距离屏幕边缘最小距离
 
-@interface MCPopMenuView()
+@interface MCPopMenuView()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIView *bgHoldView;
 @property (nonatomic, assign) MCPopViewType viewType; // 弹窗种类
 @property (nonatomic, assign) CGPoint anchor;
@@ -25,6 +26,7 @@
 
 @property (nonatomic, strong) NSArray *titleArray; //资源数组
 @property (nonatomic, strong) NSArray *imageArray; //图片数组
+@property (nonatomic, strong) MCMenuTableView *menuTableView; //可滑动菜单
 @end
 
 @implementation MCPopMenuView
@@ -65,9 +67,22 @@
     return self;
 }
 
+- (instancetype)initFromView:(UIView *)view titleArray:(NSArray <NSString *>*)titleArray viewWidth:(CGFloat) width{
+    if (self = [super initWithFrame:CGRectMake(0, 0, MC_SCREEN_W, MC_SCREEN_H)]){
+        self.anchorView = view;
+        self.v_temWidth = width;
+        self.titleArray = titleArray;
+        self.imageArray = @[];
+        self.viewType = MCPopViewTypeMenu;
+        [self initView];
+    }
+    return self;
+}
+
 - (void)initView{
     self.setting = [MCPopMenuSetting defaultSetting];
     UITapGestureRecognizer *atap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+    atap.delegate = self;
     [self addGestureRecognizer:atap];
 }
 
@@ -79,8 +94,20 @@
     }
 }
 
+// 处理手势冲突
+- (BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch {
+    if([NSStringFromClass([touch.view class]) isEqual:@"UITableViewCellContentView"]){
+        return NO;
+    }
+    return YES;
+}
+
 - (void)tapAction {
-    [self removeFromSuperview];
+    [self dismissView];
+}
+
+- (void)dismissView {
+     [self removeFromSuperview];
 }
 
 #pragma mark - 弹出文本框
@@ -287,7 +314,17 @@
 - (void)popMenuView{
     [self removeFromSuperview];
     self.v_width = self.v_temWidth;
-    self.v_height = (self.setting.rowHeight)*self.titleArray.count - self.setting.lineHeight;// + self.setting.cornerRadius;
+    
+    if (self.setting.fixedNumber == 0){// 不固定高度
+        if (self.setting.maxNumber == 0){//根据个数展示
+            self.v_height = (self.setting.rowHeight)*self.titleArray.count;
+        }else {
+            self.v_height = (self.setting.rowHeight)*(self.setting.maxNumber);
+        }
+    }else {
+        self.v_height = (self.setting.rowHeight)*(self.setting.fixedNumber);
+    }
+    
     self.backgroundColor = self.setting.maskColor;
     UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
     [keyWindow addSubview:self];
@@ -338,24 +375,19 @@
     bgView.clipsToBounds = YES;
     [self addSubview:bgView];
     
-    for (int i = 0; i < self.titleArray.count; i++){
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, i*self.setting.rowHeight, self.v_width, self.setting.rowHeight - self.setting.lineHeight)];
-        [button setTitle:self.titleArray[i] forState:UIControlStateNormal];
-        [button setTitleColor:self.setting.textColor forState:UIControlStateNormal];
-        [button setImage:[UIImage imageNamed:self.imageArray[i]] forState:UIControlStateNormal];
-        button.titleLabel.font = self.setting.textFont;
-        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
-        button.titleEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0);
-        [button setBackgroundImage:[self imageWithColor:self.setting.backgroundColor] forState:UIControlStateNormal];
-        [button setBackgroundImage:[self imageWithColor:self.setting.highlightColor] forState:UIControlStateHighlighted];
-        [bgView addSubview:button];
-        
-        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, (i+1)*self.setting.rowHeight-self.setting.lineHeight, self.v_width, self.setting.lineHeight)];
-        lineView.backgroundColor = self.setting.lineColor;
-        lineView.hidden = (i == self.titleArray.count - 1) ? YES : NO;
-        [bgView addSubview:lineView];
-    }
+    self.menuTableView = [[MCMenuTableView alloc] initWithFrame:CGRectMake(0, 0, bgView.frame.size.width, bgView.frame.size.height)];
+    self.menuTableView.textArray = self.titleArray;
+    self.menuTableView.imageArray = self.imageArray;
+    self.menuTableView.menuSetting = self.setting;
+    [bgView addSubview:self.menuTableView];
+    
+    __weak typeof (self) weakSelf = self;
+    self.menuTableView.selectBlock = ^(NSUInteger row) {
+        if ([weakSelf.delegate respondsToSelector:@selector(menuSelectAtIndex:)]){
+            [weakSelf.delegate menuSelectAtIndex:row];
+            [weakSelf dismissView];
+        }
+    };
 }
 
 // 根据宽度计算高度
@@ -375,30 +407,5 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
-}
-
-
-@end
-
-#pragma mark - defaultSetting，默认设置
-@interface MCPopMenuSetting()
-
-@end
-@implementation MCPopMenuSetting
-+ (MCPopMenuSetting *)defaultSetting {
-    MCPopMenuSetting *setting = [[MCPopMenuSetting alloc] init];
-    setting.maskColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3]; // 遮罩背景色
-    setting.backgroundColor = [UIColor whiteColor]; // 背景色
-    setting.cornerRadius = 5.0; //圆角
-    setting.textColor = [UIColor blackColor]; //字体颜色
-    setting.textFont = [UIFont systemFontOfSize:15.0f]; //字体大小
-    setting.textAlignment = NSTextAlignmentLeft;
-    setting.margin = 10.0f; // 文本间距
-    setting.dirction = MCPopMenuDirectionDown; // 箭头方向
-    setting.rowHeight = 40.0f; // 菜单行高
-    setting.highlightColor = [UIColor lightGrayColor]; // 菜单高亮颜色
-    setting.lineColor = [UIColor whiteColor]; //分割线颜色
-    setting.lineHeight = 0.5f; // 分割线高度
-    return setting;
 }
 @end

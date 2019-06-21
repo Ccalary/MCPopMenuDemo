@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D6FB1A422BC9DCD00F11713 /* MCMenuTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6FB1A322BC9DCD00F11713 /* MCMenuTableView.m */; };
+		0D6FB1A722BCA89800F11713 /* MCPopMenuSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6FB1A622BCA89800F11713 /* MCPopMenuSetting.m */; };
 		FE940BD52047E59200AF10E2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FE940BD42047E59200AF10E2 /* AppDelegate.m */; };
 		FE940BD82047E59200AF10E2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE940BD72047E59200AF10E2 /* ViewController.m */; };
 		FE940BDB2047E59200AF10E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE940BD92047E59200AF10E2 /* Main.storyboard */; };
@@ -17,6 +19,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D6FB1A222BC9DCD00F11713 /* MCMenuTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCMenuTableView.h; sourceTree = "<group>"; };
+		0D6FB1A322BC9DCD00F11713 /* MCMenuTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCMenuTableView.m; sourceTree = "<group>"; };
+		0D6FB1A522BCA89800F11713 /* MCPopMenuSetting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCPopMenuSetting.h; sourceTree = "<group>"; };
+		0D6FB1A622BCA89800F11713 /* MCPopMenuSetting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCPopMenuSetting.m; sourceTree = "<group>"; };
 		FE940BD02047E59200AF10E2 /* MCPopMenuDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MCPopMenuDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE940BD32047E59200AF10E2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FE940BD42047E59200AF10E2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -80,6 +86,10 @@
 			children = (
 				FE940BEA2047E9FE00AF10E2 /* MCPopMenuView.h */,
 				FE940BEB2047E9FE00AF10E2 /* MCPopMenuView.m */,
+				0D6FB1A222BC9DCD00F11713 /* MCMenuTableView.h */,
+				0D6FB1A322BC9DCD00F11713 /* MCMenuTableView.m */,
+				0D6FB1A522BCA89800F11713 /* MCPopMenuSetting.h */,
+				0D6FB1A622BCA89800F11713 /* MCPopMenuSetting.m */,
 			);
 			path = MCPopMenu;
 			sourceTree = "<group>";
@@ -157,8 +167,10 @@
 			files = (
 				FE940BD82047E59200AF10E2 /* ViewController.m in Sources */,
 				FE940BEC2047E9FE00AF10E2 /* MCPopMenuView.m in Sources */,
+				0D6FB1A422BC9DCD00F11713 /* MCMenuTableView.m in Sources */,
 				FE940BE32047E59200AF10E2 /* main.m in Sources */,
 				FE940BD52047E59200AF10E2 /* AppDelegate.m in Sources */,
+				0D6FB1A722BCA89800F11713 /* MCPopMenuSetting.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

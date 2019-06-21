@@ -12,8 +12,7 @@
 #define MC_SCREEN_W [UIScreen mainScreen].bounds.size.width
 #define MC_SCREEN_H [UIScreen mainScreen].bounds.size.height
 
-@interface ViewController ()
-@property (weak, nonatomic) IBOutlet UIButton *PopLabel;
+@interface ViewController ()<MCPopMenuViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end
@@ -43,19 +42,21 @@
 
 // 右侧加号按钮
 - (IBAction)addBtnAction:(UIBarButtonItem *)sender {
-
     MCPopMenuView *menuView = [[MCPopMenuView alloc] initWithAnchor:CGPointMake(MC_SCREEN_W - 33, 66) text:@"Hello World 我是一个边角提示框" viewWidth:100];
     [menuView popView];
 }
-// 中间按钮，弹出label
-- (IBAction)popLabelAction:(UIButton *)sender {
-//    MCPopMenuView *menuView = [[MCPopMenuView alloc] initFromView:sender text:@"Hello World 你好欢迎来到我的社区" viewWidth:150];
-    MCPopMenuView *menuView = [[MCPopMenuView alloc] initFromView:sender titleArray:@[@"发起群聊",@"扫一扫",@"摇一摇",@"转一转"] imageArray:@[@"add_22",@"add_22",@"add_22",@"add_22"] viewWidth:120];
-    menuView.setting.dirction = arc4random()%4;
-    menuView.setting.lineHeight = 0.8;
-    menuView.setting.lineColor = [UIColor grayColor];
-    menuView.setting.backgroundColor = [UIColor whiteColor];
-    menuView.setting.textColor = [UIColor blackColor];
+//弹出可滑动菜单
+- (IBAction)popScrollMenu:(UIButton *)sender {
+    MCPopMenuView *menuView = [[MCPopMenuView alloc] initFromView:sender titleArray:@[@"发起群聊",@"扫一扫",@"摇一摇",@"加好友",@"收款",@"付款"] viewWidth:100];
+    menuView.delegate = self;
+    menuView.setting.rowHeight = 30;
+    [menuView popView];
+}
+//弹出常规不可滑动菜单
+- (IBAction)popNormalMenu:(UIButton *)sender {
+    MCPopMenuView *menuView = [[MCPopMenuView alloc] initFromView:sender titleArray:@[@"发起群聊",@"扫一扫",@"摇一摇"] imageArray:@[@"add_22",@"add_22",@"add_22"] viewWidth:120];
+    menuView.setting.menuScrollEnable = NO;
+    menuView.setting.maxNumber = 0;
     [menuView popView];
 }
 
@@ -65,5 +66,9 @@
     menuView.setting.dirction = MCPopMenuDirectionLeft;
     [menuView popView];
     
+}
+
+- (void)menuSelectAtIndex:(NSUInteger)index {
+    NSLog(@"%@", [NSString stringWithFormat:@"选择了第%lu行",(unsigned long)index]);
 }
 @end
